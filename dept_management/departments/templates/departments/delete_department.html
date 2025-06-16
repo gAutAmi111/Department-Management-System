@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Department{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Delete Department</h1>
+    <p class="text-muted">Admin can delete a department. This will mark the department as inactive.</p>
+    <h3>Delete Department: {{ department.dept_name }}</h3>
+    <div class="alert alert-warning" role="alert">
+        <strong>Warning:</strong> Making this department inactive will affect employees linked to it. Please reassign them to another department first.
+    </div>
+    <form method="POST" onsubmit="return confirm('Are you sure you want to make this department inactive? This will affect linked employees.');">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-delete text-white">Delete</button>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

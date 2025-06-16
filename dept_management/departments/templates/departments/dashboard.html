@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="col-15">
+    <h1 class="my-3" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 700; color: #333;">Department Dashboard</h1>
+    <a href="{% url 'add_department' %}" class="btn btn-create text-white mb-4 d-inline-flex align-items-center gap-2" style="background: linear-gradient(90deg, #28a745, #218838); padding: 0.75rem 1.5rem; border-radius: 25px; transition: all 0.3s ease;">
+        <i class="bi bi-plus-circle"></i> Create Department
+    </a>
+    <form method="GET" class="mb-2">
+        <div class="input-group" style="max-width: 1000px;">
+            <input type="text" class="form-control" name="search" placeholder="Search departments..." value="{{ request.GET.search }}" style="border-radius: 25px 0 0 25px; padding: 0.75rem;">
+            <button type="submit" class="btn btn-primary" style="background: linear-gradient(90deg, #2575fc, #6a11cb); border: none; border-radius: 0 25px 25px 0; padding: 0.75rem 1.5rem;">
+                <i class="bi bi-search"></i> Search
+            </button>
+        </div>
+    </form>
+    <div class="table-container" style="background: #ffffff; border-radius: 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); overflow: hidden;">
+        <table class="table table-hover mb-0" style="width: 100%;">
+            <thead style="background: linear-gradient(90deg, #6a11cb, #2575fc); color: #ffffff;">
+                <tr>
+                    <th style="width: 10%; padding: 1rem;">Sr.No</th>
+                    <th style="width: 25%; padding: 1rem;">Department Name</th>
+                    <th style="width: 40%; padding: 1rem;">Description</th>
+                    <th style="width: 12.5%; padding: 1rem;">Edit</th>
+                    <th style="width: 12.5%; padding: 1rem;">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dept in departments %}
+                <tr style="transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.01)';" onmouseout="this.style.transform='scale(1)';" class="{% cycle 'bg-light' 'bg-white' %}">
+                    <td style="padding: 1rem;">{{ forloop.counter }}</td>
+                    <td style="padding: 1rem; font-weight: 500; color: #333;">{{ dept.dept_name }}</td>
+                    <td style="padding: 1rem; color: #666;">{{ dept.description }}</td>
+                    <td style="padding: 1rem;">
+                        <a href="{% url 'modify_department' dept.dept_id %}" class="btn btn-edit d-flex align-items-center justify-content-center gap-1" style="padding: 0.5rem 1rem; border-radius: 20px; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';" title="Edit Department">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </a>
+                    </td>
+                    <td style="padding: 1rem;">
+                        <a href="{% url 'delete_department' dept.dept_id %}" class="btn btn-delete text-white d-flex align-items-center justify-content-center gap-1" style="padding: 0.5rem 1rem; border-radius: 20px; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';" title="Delete Department">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-4" style="color: #666;">
+                        <i class="bi bi-exclamation-circle" style="font-size: 1.5rem;"></i><br>
+                        No departments found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
