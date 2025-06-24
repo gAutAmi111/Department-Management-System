@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Role{% endblock %}
+
+{% block content %}
+<div class="col-9">
+    <h1 class="my-3" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 700; color: #333;">Delete Role</h1>
+    <p>Are you sure you want to delete the role "{{ role.role_name }}"?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger" style="padding: 0.75rem 1.5rem; border-radius: 25px;">Confirm Delete</button>
+        <a href="{% url 'role_dashboard' %}" class="btn btn-secondary" style="padding: 0.75rem 1.5rem; border-radius: 25px;">Cancel</a>
+    </form>
+    <p>Only Admin has permission to delete roles. Implement soft delete by providing a column status in Database table as shown below in the database section with Boolean values. While delete or making role inactive, a warning message pops up must be given to the admin as making role.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Role{% endblock %}
+
+{% block content %}
+<div class="col-12">
+    <h1 class="my-4">Role Management System</h1>
+    <h1 class="my-3" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 700; color: #333;">Role Creation</h1>
+    <p>Adding a Role: Only Admin can add a role.</p>
+    <form method="POST" class="p-4 bg-white rounded shadow" style="max-width: 1500px;">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="role_name" class="form-label">Role Name</label>
+            <input type="text" class="form-control" id="role_name" name="role_name" placeholder="Enter Role Name to be created" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Role Description</label>
+            <textarea class="form-control" id="description" name="description" placeholder="Add Role Description..." rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="background: linear-gradient(90deg, #2575fc, #6a11cb); border: none; padding: 0.75rem 1.5rem; border-radius: 25px;">Create Role</button>
+    </form>
+</div>
+{% endblock %}

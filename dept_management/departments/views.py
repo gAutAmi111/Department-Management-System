@@ -81,3 +81,61 @@ def custom_logout(request):
 
 def test_logout_page(request):
     return render(request, 'departments/test_logout_page.html')
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Role
+from django.urls import reverse
+
+@login_required
+@admin_required
+def role_dashboard(request):
+    roles = Role.objects.filter(is_active=True)
+    if request.method == "GET" and 'search' in request.GET:
+        search_query = request.GET.get('search', '')
+        roles = roles.filter(role_name__icontains=search_query)
+    return render(request, 'departments/role_dashboard.html', {'roles': roles})
+
+@login_required
+@admin_required
+def add_role(request):
+    if request.method == "POST":
+        role_name = request.POST.get('role_name')
+        description = request.POST.get('description')
+        if role_name and description:
+            Role.objects.create(role_name=role_name, description=description)
+            messages.success(request, "Role created successfully!")
+            return redirect('role_dashboard')
+        messages.error(request, "Role name and description are required.")
+    return render(request, 'departments/add_role.html')
+
+@login_required
+@admin_required
+def modify_role(request, role_id):
+    role = get_object_or_404(Role, pk=role_id)
+    if request.method == "POST":
+        role.role_name = request.POST.get('role_name')
+        role.description = request.POST.get('description')
+        role.save()
+        messages.success(request, "Role updated successfully!")
+        return redirect('role_dashboard')
+    return render(request, 'departments/modify_role.html', {'role': role})
+
+@login_required
+@admin_required
+def delete_role(request, role_id):
+    role = get_object_or_404(Role, pk=role_id)
+    if request.method == "POST":
+        role.is_active = False  # Soft delete
+        role.save()
+        messages.success(request, "Role deleted successfully!")
+        return redirect('role_dashboard')
+    return render(request, 'departments/delete_role.html', {'role': role})
+    role = get_object_or_404(Role, pk=role_id)
+    if request.method == "POST":
+        role.is_active = False  # Soft delete
+        role.save()
+        messages.success(request, "Role deleted successfully!")
+        return redirect('role_dashboard')
+    return render(request, 'roles/delete_role.html', {'role': role})
