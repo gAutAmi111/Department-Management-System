@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+# dept_management/urls.py
 from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import redirect
@@ -25,5 +26,5 @@ urlpatterns = [
     path('departments/', include('departments.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/logout/', LogoutView.as_view(http_method_names=['get', 'post']), name='logout'),
-    path('', lambda request: redirect('dashboard'), name='root'),
+    path('', lambda request: redirect('departments:dashboard'), name='root'),  # Updated to use namespace
 ]

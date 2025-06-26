@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Employee{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <h1 class="mb-4" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 700; color: #333;">
+        Update Employee
+    </h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- ✅ FIXED LINE -->
+    <form method="POST" action="{% url 'departments:modify_employee' employee.employee_id %}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-control" name="first_name" value="{{ employee.first_name }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-control" name="last_name" value="{{ employee.last_name }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" value="{{ employee.email }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Mobile Number</label>
+                <input type="text" class="form-control" name="mobile_number" value="{{ employee.mobile_number }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Department</label>
+                <select class="form-select" name="department" required>
+                    <option value="">Select Department</option>
+                    {% for dept in departments %}
+                        <option value="{{ dept.dept_id }}" {% if employee.department_id == dept.dept_id %}selected{% endif %}>{{ dept.dept_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Role</label>
+                <select class="form-select" name="role" required>
+                    <option value="">Select Role</option>
+                    {% for role in roles %}
+                        <option value="{{ role.id }}" {% if employee.role_id == role.id %}selected{% endif %}>{{ role.role_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Reporting Manager</label>
+                <select class="form-select" name="reporting_manager">
+                    <option value="" {% if not employee.reporting_manager_id %}selected{% endif %}>None</option>
+                    {% for manager in managers %}
+                        <option value="{{ manager.employee_id }}" {% if employee.reporting_manager_id == manager.employee_id %}selected{% endif %}>{{ manager.first_name }} {{ manager.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Date of Joining</label>
+                <input type="date" class="form-control" name="date_of_joining" value="{{ employee.date_of_joining|date:'Y-m-d' }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" value="{{ employee.username }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Password <small class="text-muted">(leave blank to keep unchanged)</small></label>
+                <input type="password" class="form-control" name="password" placeholder="Enter new password or leave blank">
+            </div>
+        </div>
+
+        <div class="text-end">
+            <button type="submit" class="btn text-white"
+                style="background: linear-gradient(90deg, #007bff, #0056b3); padding: 0.6rem 1.5rem; border-radius: 25px; transition: 0.3s;">
+                Update Employee
+            </button>
+        </div>
+    </form>
+
+    <p class="mt-3 text-muted">After update, the user will be redirected to the dashboard.</p>
+</div>
+{% endblock %}
